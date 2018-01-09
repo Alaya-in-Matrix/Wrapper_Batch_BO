@@ -11,7 +11,6 @@ from math import *
 from multiprocessing import Process, Queue
 
 
-
 argv = sys.argv[1:]
 conf = toml.load(argv[0])
 
@@ -22,9 +21,9 @@ num_cores  = conf["num_cores"]
 num_init   = conf["num_init"]
 var_name   = conf["var_name"]
 
+
 os.system("rm -rf work")
 os.system("mkdir work")
-
 for i in xrange(batch_size):
     copy_cmd = "cp -r ./circuit work/%d" % i
     os.system(copy_cmd)
@@ -35,7 +34,7 @@ domain = []
 for i in xrange(dim):
     domain.append({'name': 'var1', 'type': 'continuous', 'domain': (bounds[i][0],bounds[i][1])})
 
-obj_f  = obj.Obj(bounds, num_init)
+obj_f  = obj.Obj(bounds, num_init, var_name)
 
 def obj_func_batch(xs):
     ys = []
