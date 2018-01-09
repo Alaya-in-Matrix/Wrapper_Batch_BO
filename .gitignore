@@ -1,0 +1,5 @@
+# ignore file
+
+*.swp
+*.pyc
+work/

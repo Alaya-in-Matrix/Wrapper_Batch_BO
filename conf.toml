@@ -1,0 +1,11 @@
+bounds   = [
+    [0, 10], 
+    [0, 10], 
+    [0, 10], 
+    [0, 10]
+]
+var_name   = ["x1", "x2", "x3", "x4"]
+max_iter   = 4
+num_init   = 4
+batch_size = 4
+num_cores  = 1
