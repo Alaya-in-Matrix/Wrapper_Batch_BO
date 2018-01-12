@@ -29,6 +29,7 @@ class Obj(object):
         if(fom < self.curr_best_y):
             self.curr_best_y = fom
             self.curr_best_x = x
+        print [x, fom]
         return np.array([fom])
 
     def evaluate(self, id, x):
