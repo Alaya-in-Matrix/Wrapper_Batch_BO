@@ -85,8 +85,9 @@ for pt in init_pts:
 # observe
 derivatives = objective_func._observations
 observations = [0] + [i+1 for i in derivatives]
-init_pts_value = np.array([objective_func.evaluate(id % num_to_sample, pt) for id, pt in enumerate(init_pts)])#[:, observations]
-true_value_init = np.array([objective_func.evaluate_true(id % num_to_sample, pt) for id, pt in enumerate(init_pts)])#[:, observations]
+init_pts_value  = np.array([objective_func.evaluate(id % num_to_sample, pt) for id, pt in enumerate(init_pts)])#[:, observations]
+true_value_init = init_pts_value;
+# true_value_init = np.array([objective_func.evaluate_true(id % num_to_sample, pt) for id, pt in enumerate(init_pts)])#[:, observations]
 
 init_data = HistoricalData(dim = objective_func._dim, num_derivatives = len(derivatives))
 init_data.append_sample_points([SamplePoint(pt, [init_pts_value[num, i] for i in observations],
@@ -132,9 +133,9 @@ report_point = np.concatenate((report_point, np.ones(objective_func._num_fidelit
 print "best so far in the initial data {0}".format(true_value_init[np.argmin(true_value_init[:,0])][0])
 capital_so_far = 0.
 for n in xrange(num_iteration):
-    print "qEI, {0}th job, {1}th iteration, func={2}, q={3}".format(
-            job_id, n, obj_func_name, num_to_sample
-    )
+    # print "qEI, {0}th job, {1}th iteration, func={2}, q={3}".format(
+    #         job_id, n, obj_func_name, num_to_sample
+    # )
     time1 = time.time()
     discrete_pts_list = []
     discrete = inner_search_domain.generate_uniform_random_points_in_domain(200)
@@ -177,10 +178,10 @@ for n in xrange(num_iteration):
     next_points, voi = bgo_methods.gen_sample_from_qei(cpp_gp_loglikelihood.models[0], cpp_search_domain,
                                                             cpp_sgd_params_kg, num_to_sample, num_mc=1000)
 
-    print "qEI takes "+str((time.time()-time1))+" seconds"
+    # print "qEI takes "+str((time.time()-time1))+" seconds"
     #time1 = time.time()
-    print "qEI suggest points:"
-    print next_points
+    # print "qEI suggest points:"
+    # print next_points
 
     sampled_points = [SamplePoint(pt, objective_func.evaluate(id % num_to_sample, pt)[observations], objective_func._sample_var) for id, pt in enumerate(next_points)]
 
@@ -193,7 +194,7 @@ for n in xrange(num_iteration):
                 value *= next_points[i, dim-1-j]
             capitals[i] = value
     capital_so_far += np.amax(capitals)
-    print "evaluating takes capital " + str(capital_so_far) +" so far"
+    # print "evaluating takes capital " + str(capital_so_far) +" so far"
 
     # retrain the model
     time1 = time.time()
@@ -201,7 +202,7 @@ for n in xrange(num_iteration):
     cpp_gp_loglikelihood.add_sampled_points(sampled_points)
     cpp_gp_loglikelihood.train()
 
-    print "retraining the model takes "+str((time.time()-time1))+" seconds"
+    # print "retraining the model takes "+str((time.time()-time1))+" seconds"
     time1 = time.time()
 
     # report the point
@@ -229,8 +230,8 @@ for n in xrange(num_iteration):
     report_point = report_point.ravel()
     report_point = np.concatenate((report_point, np.ones(objective_func._num_fidelity)))
 
-    print "the recommended point: ",
-    print report_point
-    print "recommending the point takes "+str((time.time()-time1))+" seconds"
-    print "qEI, VOI {0}, best so far {1}".format(voi, objective_func.evaluate_true(0, report_point)[0])
+    # print "the recommended point: ",
+    # print report_point
+    # print "recommending the point takes "+str((time.time()-time1))+" seconds"
+    # print "qEI, VOI {0}, best so far {1}".format(voi, objective_func.evaluate_true(0, report_point)[0])
     print "Current bestY: %g" % objective_func.curr_best_y
