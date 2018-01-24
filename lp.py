@@ -8,7 +8,8 @@ import os, sys
 import toml
 import obj
 from math import *
-from multiprocessing import Process, Queue
+from joblib import Parallel, delayed
+import multiprocessing
 
 
 argv = sys.argv[1:]
@@ -36,10 +37,14 @@ for i in xrange(dim):
 
 obj_f  = obj.Obj(bounds, num_init, var_name)
 
+def obj_func(id, x):
+    return obj_f.evaluate(id, x)
+
 def obj_func_batch(xs):
-    ys = []
-    for id, x in enumerate(xs):
-        ys.append(obj_f.evaluate(id % batch_size, x))
+    ys = Parallel(n_jobs = batch_size)(delayed(obj_func)(id % batch_size, x) for id, x in enumerate(xs))
+    # ys = []
+    # for id, x in enumerate(xs):
+    #     ys.append(obj_f.evaluate(id % batch_size, x))
     return np.array(ys)
 
 
