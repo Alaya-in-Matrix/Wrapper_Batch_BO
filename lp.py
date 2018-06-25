@@ -70,7 +70,7 @@ while current_iter < iter_count:
             num_cores          = num_cores,
             eps                = 0,
             ARD                = True, 
-            kernel             = GPy.kern.RBF(dim, variance=1., ARD=True),
+            kernel             = GPy.kern.RBF(dim, ARD=True),
             )
     print "Iter %d" % current_iter
     x_next = bo_step.suggest_next_locations()
